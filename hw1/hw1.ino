@@ -20,7 +20,7 @@ void loop() {
   bool LEDon = false;
 
   if (nightMode){ //darker room = light on
-    if ((currBrightness < threshold)){
+    if ((currBrightness > threshold)){
       digitalWrite(12,HIGH);
       LEDon = true;
     }
@@ -32,7 +32,7 @@ void loop() {
   }
   
   else { //brighter room = light on
-    if ((currBrightness >= threshold)){
+    if ((currBrightness <= threshold)){
       digitalWrite(12,HIGH);
       LEDon = true;
     }
@@ -52,8 +52,8 @@ void loop() {
   else Serial.print("day mode ");
 
   Serial.print("and the LED is ");
-  if (LEDon) Serial.print("on");
-  else Serial.print("off");
+  if (LEDon) Serial.print("on\n");
+  else Serial.print("off\n");
   
   
 

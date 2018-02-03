@@ -1,11 +1,31 @@
+#include <Servo.h>
+
+//Servo motor;
+int servoPin = 3;
+int pot = A0;
+
+
 void setup(){
+  //motor.attach(servoPin);
+  //pinMode(pot,INPUT);
+  //Serial.begin(9600);
   pinMode(12,OUTPUT);
-  pinMode(13,OUTPUT);
-  pinMode(7,OUTPUT);
-  pinMode(A0,INPUT);
-  Serial.begin(9600);
   
 }
+
+
+
+void loop() {
+  digitalWrite(12,HIGH);
+  delay(2500);
+  digitalWrite(12,LOW);
+  delay(2500);
+}
+
+
+
+
+
 
 
 
@@ -16,22 +36,5 @@ bool isPrime(int n){
     if (n%factor ==0) return false;
   }
   return true;
-}
-
-void loop() {
-    // s ... o--- s...
-    int readStuff = analogRead(A0);
- 
-
-    if (isPrime(readStuff)){
-      digitalWrite(12,HIGH);
-      digitalWrite(7,LOW);
-    }
-    else {
-      digitalWrite(7,HIGH);
-      digitalWrite(12,LOW);
-    }
-    
-    Serial.println(readStuff);
 }
 
