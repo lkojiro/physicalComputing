@@ -1,23 +1,33 @@
-#include <Servo.h>
+#include "pitches.h"
 #include <NewPing.h>
+
+// notes in the melody: from http://www.arduino.cc/en/Tutorial/Tone
+int melody[] = {
+  NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, 0, NOTE_B3, NOTE_C4
+};
+
+// note durations: 4 = quarter note, 8 = eighth note, etc.:
+int noteDurations[] = {
+  4, 8, 8, 4, 4, 4, 4, 4
+};
 
 #define TRIGGER_PIN 12
 #define ECHO_PIN    11
 #define MAX_DIST    200
 
-Servo motor;
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DIST);
 
-int servoPin = 10;
 int LED0 = 2;
 int LED1 = 3;
 int LED2 = 4;
 int LED3 = 5;
 int LED4 = 6;
 
+int BUZZ = 8;
+
+
 int countdownClock = 0;
 int counted = 0;
-int randomizer = 0;
 int pause = 500;
 long timer = 0;
 
@@ -29,13 +39,12 @@ void setup(){
   pinMode(LED2,OUTPUT);
   pinMode(LED3,OUTPUT);
   pinMode(LED4,OUTPUT);
+  
   countdownClock = 0;
   counted = 0;
 
   
-  motor.attach(servoPin);
   Serial.begin(115200);
-  motor.write(90);
   
   
 }
@@ -110,10 +119,31 @@ void launch(){
     delay(100);
     writeAll(HIGH);
     delay(100);
+    
 
-    //launch the ball
-    motor.write(180);
+    //play a tune
+    for (int thisNote = 0; thisNote < 8; thisNote++) {
+      // to calculate the note duration, take one second divided by the note type.
+      //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
+      int noteDuration = 1000 / noteDurations[thisNote];
+      tone(BUZZ, melody[thisNote], noteDuration);
+  
+      // to distinguish the notes, set a minimum time between them.
+      // the note's duration + 30% seems to work well:
+      int pauseBetweenNotes = noteDuration * 1.30;
+      delay(pauseBetweenNotes);
+      // stop the tone playing:
+      noTone(BUZZ);
+  }
+    
+
+    //reset sequence
     delay(3000);
+    while (true){ //after 3 seconds, move hand close to
+                 //ultrasonic sensor to reset motor
+      delay(40);
+      if (sonar.ping_cm() < 20) break;
+    }
     setup();
     
     
@@ -121,7 +151,7 @@ void launch(){
 }
 
 void outRangeLED(){
-  int scanFreq = 500;
+  int scanFreq = 300;
   int when = millis()%scanFreq;
   int scanSegment = scanFreq/5;
 
@@ -166,13 +196,14 @@ void outRangeLED(){
 void loop() {
   delay(40);
   
-  randomizer++;
-  int cutoffDist = 15;
+  int cutoffDist = 35;
   bool inRange = (sonar.ping_cm() < cutoffDist);
 
-  Serial.println(countdownClock);
-  Serial.print("counter: ");
-  Serial.println(counted);
+  Serial.println(sonar.ping_cm());
+
+//  Serial.println(countdownClock);
+//  Serial.print("counter: ");
+//  Serial.println(counted);
   
   if (inRange){ // if in range, increment timer every 500ms
     
@@ -184,9 +215,8 @@ void loop() {
         countdownClock = 0;
       }
     }
-    if (counted == random(1,20) && countdownClock == 5){
-    //if counted down 1-3 times, launch ball
-      if (counted !=0) launch();
+    if (counted == random(1,5) && countdownClock == 5){
+      launch();
     }
     inRangeLED();
     
