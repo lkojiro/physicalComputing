@@ -1,5 +1,6 @@
 #include "pitches.h"
 #include <NewPing.h>
+#include <Servo.h>
 
 // notes in the melody: from http://www.arduino.cc/en/Tutorial/Tone
 int melody[] = {
@@ -22,6 +23,8 @@ int LED1 = 3;
 int LED2 = 4;
 int LED3 = 5;
 int LED4 = 6;
+Servo motor;
+int servoPin = 10;
 
 int BUZZ = 8;
 
@@ -39,6 +42,8 @@ void setup(){
   pinMode(LED2,OUTPUT);
   pinMode(LED3,OUTPUT);
   pinMode(LED4,OUTPUT);
+  motor.attach(servoPin);
+  motor.write(160);
   
   countdownClock = 0;
   counted = 0;
@@ -134,7 +139,12 @@ void launch(){
       delay(pauseBetweenNotes);
       // stop the tone playing:
       noTone(BUZZ);
-  }
+      if (thisNote%2 == 0) motor.write(0);
+      else motor.write(15);
+    }
+
+    //activate hand
+    
     
 
     //reset sequence
