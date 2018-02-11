@@ -1,6 +1,6 @@
 
 
-  ######  Physical Computing Project 1: The Friendly Box ######
+########  Physical Computing Project 1: The Friendly Box ########
 
 
 License.txt:
