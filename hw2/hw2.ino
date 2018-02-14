@@ -1,28 +1,49 @@
-#define LED 7
-#define SW 8
-#define B0 9
-#define B1 10
+#define LEDY 5
+#define LEDR 6
+#define LEDG 7
+#define B0 8
+#define B1 9
+#define B2 10
+#define B3 11
 
 
 void setup() {
-  pinMode(LED,OUTPUT);
-  pinMode(SW,INPUT);
+  pinMode(LEDR,OUTPUT);
+  pinMode(LEDG,OUTPUT);
+  pinMode(LEDY,OUTPUT);
   pinMode(B0,INPUT);
   pinMode(B1,INPUT);
+  pinMode(B2,INPUT);
+  pinMode(B3,INPUT);
   
 }
 
 void loop() {
-  bool closed1 = digitalRead(SW);
-  bool closed2 = digitalRead(B0);
-  bool closed3 = digitalRead(B1);
-
-  bool allClosed = closed1 & closed2 & closed3;
-
-  if (!allClosed){
-    digitalWrite(LED,HIGH);
+  
+  int vote0 = (digitalRead(B0)) ? 1 : 0;
+  int vote1 = (digitalRead(B1)) ? 1 : 0;
+  int vote2 = (digitalRead(B2)) ? 1 : 0;
+  int vote3 = (digitalRead(B3)) ? 1 : 0;
+  
+  int votes = vote0 + vote1 + vote2 + vote3;
+  
+  if (votes == 0 || votes == 4) {
+    digitalWrite(LEDG,HIGH);
+    digitalWrite(LEDR,LOW);
+    digitalWrite(LEDY,LOW);
   }
-  else digitalWrite(LED,LOW);
+
+  else if (votes == 1 || votes == 3){
+    digitalWrite(LEDG,LOW);
+    digitalWrite(LEDR,LOW);
+    digitalWrite(LEDY,HIGH);
+  }
+  else {
+    digitalWrite(LEDG,LOW);
+    digitalWrite(LEDR,HIGH);
+    digitalWrite(LEDY,LOW);
+  }
+
 }
 
 
