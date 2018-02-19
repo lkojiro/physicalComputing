@@ -93,5 +93,6 @@ void lightControl(bool lit, unsigned long timer, int LED){
       timer = millis();
     }
   }
+  else digitalWrite(LED,LOW);
 }
 
