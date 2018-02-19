@@ -23,6 +23,7 @@ int LED1 = 3;
 int LED2 = 4;
 int LED3 = 5;
 int LED4 = 6;
+
 Servo motor;
 int servoPin = 10;
 
@@ -42,6 +43,7 @@ void setup(){
   pinMode(LED2,OUTPUT);
   pinMode(LED3,OUTPUT);
   pinMode(LED4,OUTPUT);
+  
   motor.attach(servoPin);
   motor.write(160);
   
@@ -50,8 +52,6 @@ void setup(){
 
   
   Serial.begin(115200);
-  
-  
 }
 
 
@@ -126,7 +126,7 @@ void launch(){
     delay(100);
     
 
-    //play a tune
+    //play a tune and wave the hand
     for (int thisNote = 0; thisNote < 8; thisNote++) {
       // to calculate the note duration, take one second divided by the note type.
       //e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
@@ -143,14 +143,12 @@ void launch(){
       else motor.write(15);
     }
 
-    //activate hand
-    
     
 
     //reset sequence
-    delay(3000);
-    while (true){ //after 3 seconds, move hand close to
-                 //ultrasonic sensor to reset motor
+    delay(2000);
+    while (true){ //after 2 seconds, move hand close to
+                 //the ultrasonic sensor to reset motor
       delay(40);
       if (sonar.ping_cm() < 20) break;
     }
@@ -164,36 +162,37 @@ void outRangeLED(){
   int scanFreq = 300;
   int when = millis()%scanFreq;
   int scanSegment = scanFreq/5;
-
-  if (when < (scanSegment)){
+  
+  //flash LED with corresponding fifth of the time segment
+  if (when < (scanSegment)){ //1/5
     digitalWrite(LED0,HIGH);
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,LOW);
     digitalWrite(LED3,LOW);
     digitalWrite(LED4,LOW);
   }
-  else if (when < 2*scanSegment){
+  else if (when < 2*scanSegment){ //2/5
     digitalWrite(LED0,LOW);
     digitalWrite(LED1,HIGH);
     digitalWrite(LED2,LOW);
     digitalWrite(LED3,LOW);
     digitalWrite(LED4,LOW);
   }
-  else if (when < 3*scanSegment){
+  else if (when < 3*scanSegment){ //3/5
     digitalWrite(LED0,LOW);
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,HIGH);
     digitalWrite(LED3,LOW);
     digitalWrite(LED4,LOW);
   }
-  else if (when < 4*scanSegment){
+  else if (when < 4*scanSegment){//4/5
     digitalWrite(LED0,LOW);
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,LOW);
     digitalWrite(LED3,HIGH);
     digitalWrite(LED4,LOW);
   }
-  else {
+  else {                         //5/5
     digitalWrite(LED0,LOW);
     digitalWrite(LED1,LOW);
     digitalWrite(LED2,LOW);
@@ -209,7 +208,7 @@ void loop() {
   int cutoffDist = 35;
   bool inRange = (sonar.ping_cm() < cutoffDist);
 
-  Serial.println(sonar.ping_cm());
+//  Serial.println(sonar.ping_cm());
 
 //  Serial.println(countdownClock);
 //  Serial.print("counter: ");
@@ -225,6 +224,8 @@ void loop() {
         countdownClock = 0;
       }
     }
+    //after counting down 1-5 times, trigger launch
+    //once final countdown sequence is complete
     if (counted == random(1,5) && countdownClock == 5){
       launch();
     }
