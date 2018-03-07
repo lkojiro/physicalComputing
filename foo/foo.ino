@@ -1,25 +1,15 @@
-
+int LED = A0;
 
 
 void setup() {
-  pinMode(LED,OUTPUT);
-  pinMode(SW,INPUT);
-  pinMode(B0,INPUT);
-  pinMode(B1,INPUT);
+  pinMode(LED,INPUT);
+  Serial.begin(9600);
   
 }
 
 void loop() {
-  bool closed1 = digitalRead(SW);
-  bool closed2 = digitalRead(B0);
-  bool closed3 = digitalRead(B1);
-
-  bool allClosed = closed1 & closed2 & closed3;
-
-  if (!allClosed){
-    digitalWrite(LED,HIGH);
-  }
-  else digitalWrite(LED,LOW);
+  Serial.println(digitalRead(LED));
+  
 }
 
 

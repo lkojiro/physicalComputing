@@ -1,10 +1,10 @@
 int LEDY = 5;
 int LEDR = 6;
 int LEDG = 7;
-int B0 = 8;   #one point
-int B1 = 9;   #two points
-int B2 = 10;  #three points
-int B3 = 11;  #reset
+int b0 = 8;   //one point
+int b1 = 9;   //two points
+int b2 = 10;  //three points
+int b3 = 11;  //reset
 
 int score = 0;
 
@@ -21,10 +21,10 @@ void setup() {
   pinMode(LEDR,OUTPUT);
   pinMode(LEDG,OUTPUT);
   pinMode(LEDY,OUTPUT);
-  pinMode(B0,INPUT);
-  pinMode(B1,INPUT);
-  pinMode(B2,INPUT);
-  pinMode(B3,INPUT);
+  pinMode(b0,INPUT);
+  pinMode(b1,INPUT);
+  pinMode(b2,INPUT);
+  pinMode(b3,INPUT);
   Serial.begin(9600);
 }
 
@@ -32,10 +32,10 @@ void setup() {
 
 
 void loop() {
-  bool onePoint = digitalRead(B0);
-  bool twoPoint = digitalRead(B1);
-  bool threePoint = digitalRead(B2);
-  bool reset = digitalRead(B3);
+  bool onePoint = digitalRead(b0);
+  bool twoPoint = digitalRead(b1);
+  bool threePoint = digitalRead(b2);
+  bool reset = digitalRead(b3);
 
   if (onePoint){
     score++;
